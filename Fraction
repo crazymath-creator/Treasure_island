@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Island Race 🏴‍☠️</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        h1 { color: #f1c40f; }
+        .problem-box {
+            font-size: 28px;
+            margin: 20px 0;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        input {
+            font-size: 20px;
+            padding: 8px;
+            width: 60px;
+            text-align: center;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover { background-color: #219653; }
+        #feedback { font-size: 20px; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏴‍☠️ Treasure Island Race 🏝️</h1>
+        <p>Convert the captain's improper fraction to a mixed number to move your ship!</p>
+        
+        <div class="problem-box" id="fraction-display">
+            Convert: <span id="improper-fraction">9/4</span>
+        </div>
+
+        <div>
+            <label>Whole Number:</label><br>
+            <input type="number" id="whole-input" placeholder="Whole"><br><br>
+            
+            <label>Numerator & Denominator:</label><br>
+            <input type="number" id="num-input" placeholder="Num"> / 
+            <input type="number" id="den-input" placeholder="Den">
+        </div>
+
+        <button onclick="checkAnswer()">Unlock Chest 🗝️</button>
+        <div id="feedback"></div>
+        <p>Score: <span id="score">0</span> / 5</p>
+    </div>
+
+    <script>
+        let currentProblem = { num: 9, den: 4, whole: 2, remNum: 1 };
+
+        function loadNewProblem() {
+            // Randomize a simple improper fraction for Grade 4
+            const denOptions = [3, 4, 5];
+            const den = denOptions[Math.floor(Math.random() * denOptions.length)];
+            const whole = Math.floor(Math.random() * 3) + 1; // 1 to 3 wholes
+            const remNum = Math.floor(Math.random() * (den - 1)) + 1; // remainder less than den
+            const num = (whole * den) + remNum;
+
+            currentProblem = { num, den, whole, remNum };
+            document.getElementById('improper-fraction').innerText = `${num}/${den}`;
+            document.getElementById('whole-input').value = '';
+            document.getElementById('num-input').value = '';
+            document.getElementById('den-input').value = den; // Pre-fill denominator as it stays the same
+            document.getElementById('feedback').innerText = '';
+        }
+
+        let score = 0;
+        function checkAnswer() {
+            const userWhole = parseInt(document.getElementById('whole-input').value);
+            const userNum = parseInt(document.getElementById('num-input').value);
+            const userDen = parseInt(document.getElementById('den-input').value);
+            const feedback = document.getElementById('feedback');
+
+            if (userWhole === currentProblem.whole && userNum === currentProblem.remNum && userDen === currentProblem.den) {
+                feedback.style.color = '#2ecc71';
+                feedback.innerText = "🎉 Correct! Your pirate ship sails closer to the treasure!";
+                score++;
+                document.getElementById('score').innerText = score;
+                setTimeout(loadNewProblem, 2000);
+            } else {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = "❌ Not quite right, matey! Remember: how many full groups fit into the top number?";
+            }
+        }
+
+        // Initialize first problem
+        loadNewProblem();
+    </script>
+</body>
+</html>
